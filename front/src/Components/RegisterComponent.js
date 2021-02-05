@@ -12,19 +12,26 @@ const RegisterComponent = (props) => {
 
   const registerClicked = () => {
     axios
-      .post("/api/user", {
-        API_KEY: process.env.REACT_APP_API_KEY,
-        name,
-        email,
-        password,
-        retypedPassword,
-        registerType,
-      })
+      .post(
+        "/api/user",
+        {
+          name,
+          email,
+          password,
+          retypedPassword,
+          registerType,
+        },
+        {
+          headers: {
+            API_KEY: process.env.REACT_APP_API_KEY,
+          },
+        }
+      )
       .then((res) => {
         console.log(res.data);
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response.data);
       });
   };
 
