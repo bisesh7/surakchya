@@ -1,15 +1,31 @@
 import React, { useState } from "react";
 import { Container, Input, Button } from "reactstrap";
 import NavbarComponent from "./NavbarComponent";
+import axios from "axios";
 
 const RegisterComponent = (props) => {
+  const [registerType, setRegisterType] = useState("hotel");
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [retypedPassword, setRetypedPassword] = useState("");
 
   const registerClicked = () => {
-    console.log(name, email, password, retypedPassword);
+    axios
+      .post("/api/user", {
+        API_KEY: process.env.REACT_APP_API_KEY,
+        name,
+        email,
+        password,
+        retypedPassword,
+        registerType,
+      })
+      .then((res) => {
+        console.log(res.data);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   return (
@@ -24,11 +40,23 @@ const RegisterComponent = (props) => {
             </small>
             <div className="form-inputs mt-5">
               <Input
+                type="select"
+                name="select"
+                onChange={(e) => {
+                  setRegisterType(e.target.value);
+                }}
+                defaultValue="hotel"
+              >
+                <option value="hotel">I am hotel.</option>
+                <option value="normal">I am normal user.</option>
+              </Input>
+              <Input
                 type="text"
                 placeholder="Name"
                 onChange={(e) => {
                   setName(e.target.value);
                 }}
+                value={name}
               />
               <Input
                 type="email"
@@ -36,6 +64,7 @@ const RegisterComponent = (props) => {
                 onChange={(e) => {
                   setEmail(e.target.value);
                 }}
+                value={email}
               />
               <Input
                 type="password"
@@ -43,6 +72,7 @@ const RegisterComponent = (props) => {
                 onChange={(e) => {
                   setPassword(e.target.value);
                 }}
+                value={password}
               />
               <Input
                 type="password"
@@ -50,6 +80,7 @@ const RegisterComponent = (props) => {
                 onChange={(e) => {
                   setRetypedPassword(e.target.value);
                 }}
+                value={retypedPassword}
               />
               <Button
                 color="primary"
