@@ -1,7 +1,8 @@
 import React, { useState } from "react";
-import { Container, Input, Button } from "reactstrap";
+import { Container, Input, Button, Alert } from "reactstrap";
 import NavbarComponent from "./NavbarComponent";
 import axios from "axios";
+import { functions } from "../Functions/Functions";
 
 const RegisterComponent = (props) => {
   const [registerType, setRegisterType] = useState("hotel");
@@ -10,7 +11,49 @@ const RegisterComponent = (props) => {
   const [password, setPassword] = useState("");
   const [retypedPassword, setRetypedPassword] = useState("");
 
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertColor, setAlertColor] = useState("info");
+  const onAlertDismiss = () => {
+    setAlertVisible(false);
+    setAlertColor("info");
+    setAlertMessage("");
+  };
   const registerClicked = () => {
+    if (
+      !functions.isNotEmpty(name) ||
+      !functions.isNotEmpty(email) ||
+      !functions.isNotEmpty(password) ||
+      !functions.isNotEmpty(retypedPassword)
+    ) {
+      setAlertColor("danger");
+      setAlertMessage("Empty fields.");
+      return setAlertVisible(true);
+    }
+
+    if (!functions.emailIsValid(email)) {
+      setAlertColor("danger");
+      setAlertMessage("Email is not valid.");
+      return setAlertVisible(true);
+    }
+
+    if (!functions.isSameStrings(password, retypedPassword)) {
+      setAlertColor("danger");
+      setAlertMessage("Passwords do not match.");
+      return setAlertVisible(true);
+    }
+
+    if (
+      !functions.hasLowerCaseLetter(password) ||
+      !functions.hasUpperCaseLetter(password) ||
+      !functions.hasNumber(password) ||
+      !functions.hasAtLeastEightCharacters(password)
+    ) {
+      setAlertColor("danger");
+      setAlertMessage("Invalid Password");
+      return setAlertVisible(true);
+    }
+
     axios
       .post(
         "/api/user",
@@ -41,6 +84,13 @@ const RegisterComponent = (props) => {
       <Container>
         <div className="form d-flex justify-content-center">
           <div>
+            <Alert
+              color={alertColor}
+              isOpen={alertVisible}
+              toggle={onAlertDismiss}
+            >
+              {alertMessage}
+            </Alert>
             <h3>Register</h3>
             <small className="text-muted">
               Sign in if you already have an account

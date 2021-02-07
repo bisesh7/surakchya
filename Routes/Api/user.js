@@ -48,7 +48,8 @@ router.post("/", (req, res) => {
   if (
     !userFunctions.hasLowerCaseLetter(password) ||
     !userFunctions.hasUpperCaseLetter(password) ||
-    !userFunctions.hasNumber(password)
+    !userFunctions.hasNumber(password) ||
+    !userFunctions.hasAtLeastEightCharacters(password)
   ) {
     return res
       .status(400)
