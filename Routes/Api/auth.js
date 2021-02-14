@@ -66,7 +66,7 @@ router.post("/", (req, res) => {
               .json({ success: false, msg: "Invalid credentials." });
           }
 
-          // Create and assing jwt token
+          // Create and assing jwt token.
           jwt.sign(
             { _id: user._id },
             config.get("TOKEN_SECRET"),
