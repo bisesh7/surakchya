@@ -54,9 +54,17 @@ const RegisterComponent = (props) => {
       return setAlertVisible(true);
     }
 
+    let route = "";
+
+    if (registerType === "normal") {
+      route = "/api/user";
+    } else {
+      route = "/api/hotel";
+    }
+
     axios
       .post(
-        "/api/user",
+        route,
         {
           name,
           email,
@@ -71,10 +79,18 @@ const RegisterComponent = (props) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
+        setAlertColor("success");
+        setAlertMessage(res.data.msg);
+        setAlertVisible(true);
+        setName("");
+        setEmail("");
+        setPassword("");
+        setRetypedPassword("");
       })
       .catch((err) => {
-        console.log(err.response.data);
+        setAlertColor("danger");
+        setAlertMessage(err.response.data.msg);
+        setAlertVisible(true);
       });
   };
 

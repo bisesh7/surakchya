@@ -2,17 +2,15 @@ const express = require("express");
 const router = express.Router();
 const config = require("config");
 const userFunctions = require("../../Functions/userFunctions");
-const User = require("../../Models/User");
 const Hotel = require("../../Models/Hotel");
 
 router.post("/", (req, res) => {
+  const { name, email, password, retypedPassword, registerType } = req.body;
   const API_KEY = req.header("API_KEY");
 
   if (API_KEY !== config.get("API_KEY")) {
     return res.status(401).json({ success: false });
   }
-
-  const { name, email, password, retypedPassword, registerType } = req.body;
 
   if (
     typeof name !== "string" ||
@@ -57,15 +55,15 @@ router.post("/", (req, res) => {
       .json({ success: false, msg: "Password is not valid" });
   }
 
-  if (registerType === "normal") {
-    User.findOne({ email: email.toLowerCase() }).then((user) => {
-      if (user) {
+  if (registerType === "hotel") {
+    Hotel.findOne({ email: email.toLowerCase() }).then((hotel) => {
+      if (hotel) {
         return res.json({
           success: false,
-          msg: "User account already exists, please sign in instead.",
+          msg: "Account already exists, please sign in instead.",
         });
       }
-      const newUser = new User({
+      const newHotel = new Hotel({
         name,
         email: email.toLowerCase(),
         password,
@@ -73,12 +71,12 @@ router.post("/", (req, res) => {
       });
 
       userFunctions
-        .generateHash(newUser.password)
+        .generateHash(newHotel.password)
         .then((hash) => {
           console.log(hash);
-          newUser.password = hash;
+          newHotel.password = hash;
 
-          newUser.save().then(() => {
+          newHotel.save().then(() => {
             return res.json({
               success: true,
               msg: "User account has been created.",

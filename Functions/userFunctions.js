@@ -1,3 +1,5 @@
+const bcrypt = require("bcryptjs");
+
 const functions = {
   isNotEmpty: (string) => {
     return string.length > 0;
@@ -23,6 +25,22 @@ const functions = {
   },
   isSameStrings: (string1, string2) => {
     return string1 === string2;
+  },
+  generateHash: (string) => {
+    return new Promise((resolve, reject) => {
+      bcrypt.genSalt(10, function (err, salt) {
+        if (err) {
+          reject(err);
+        }
+        bcrypt.hash(string, salt, function (err, hash) {
+          if (err) {
+            reject(err);
+          } else {
+            resolve(hash);
+          }
+        });
+      });
+    });
   },
 };
 
