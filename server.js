@@ -11,7 +11,7 @@ const cookieParser = require("cookie-parser");
 app.use(express.json());
 
 // Cookie Parser
-app.use(cookieParser(config.get("TOKEN_SECRET")));
+app.use(cookieParser());
 
 // get the mongouri from config
 const db = config.get("mongoURI");

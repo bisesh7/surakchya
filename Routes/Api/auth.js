@@ -6,7 +6,7 @@ const User = require("../../Models/User");
 const userFunctions = require("../../Functions/userFunctions");
 const Hotel = require("../../Models/Hotel");
 const bcrypt = require("bcryptjs");
-const verfiyToken = require("../../front/src/Middlewares/verfiyToken");
+const verifyToken = require("../../Middlewares/verfiyToken");
 
 router.post("/", (req, res) => {
   const API_KEY = req.header("API_KEY");
@@ -66,6 +66,17 @@ router.post("/", (req, res) => {
               .json({ success: false, msg: "Invalid credentials." });
           }
 
+          // jwt.sign(
+          //   {
+          //     id: "foobar",
+          //   },
+          //   config.get("TOKEN_SECRET"),
+          //   { expiresIn: "1h" },
+          //   (err, token) => {
+          //     console.log(token);
+          //   }
+          // );
+
           // Create and assing jwt token.
           jwt.sign(
             { _id: user._id },
@@ -79,11 +90,12 @@ router.post("/", (req, res) => {
                 });
               }
 
+              console.log(token);
+
               // Set cookies of auth token in client side
               try {
                 res.cookie("auth-token", token, {
                   httpOnly: true,
-                  signed: true,
                   // secure: true // only use https
                 });
                 return res.json({
@@ -91,6 +103,7 @@ router.post("/", (req, res) => {
                   msg: "Cookie has been added.",
                 });
               } catch (err) {
+                console.log(err);
                 return res.status(500).json({
                   success: false,
                   msg: "Server error while setting the cookie.",
@@ -134,7 +147,8 @@ router.post("/", (req, res) => {
   }
 });
 
-router.get("/auth", verfiyToken, (req, res) => {
+router.get("/auth", verifyToken, (req, res) => {
+  console.log(req.user);
   return res.json({ success: true });
 });
 
