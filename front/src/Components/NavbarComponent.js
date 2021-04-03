@@ -12,11 +12,25 @@ import {
   DropdownMenu,
   DropdownItem,
 } from "reactstrap";
+import axios from "axios";
 
 const NavbarComponent = (props) => {
   const [isOpen, setIsOpen] = useState(false);
 
   const toggle = () => setIsOpen(!isOpen);
+
+  const signOutPressed = (e) => {
+    e.preventDefault();
+    axios
+      .get("/api/auth/signout", {
+        headers: {
+          API_KEY: process.env.REACT_APP_API_KEY,
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+      });
+  };
 
   return (
     <div>
@@ -64,6 +78,11 @@ const NavbarComponent = (props) => {
                 href="/register"
               >
                 Register
+              </NavLink>
+            </NavItem>
+            <NavItem>
+              <NavLink onClick={signOutPressed} href="/signout">
+                Sign Out
               </NavLink>
             </NavItem>
           </Nav>

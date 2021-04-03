@@ -28,8 +28,7 @@ const SigninComponent = (props) => {
         }
       )
       .then((res) => {
-        console.log(res);
-        console.log("finsihed");
+        props.history.push("/");
       })
       .catch((err) => {
         console.log(err.response.data);

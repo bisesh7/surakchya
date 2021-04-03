@@ -66,17 +66,6 @@ router.post("/", (req, res) => {
               .json({ success: false, msg: "Invalid credentials." });
           }
 
-          // jwt.sign(
-          //   {
-          //     id: "foobar",
-          //   },
-          //   config.get("TOKEN_SECRET"),
-          //   { expiresIn: "1h" },
-          //   (err, token) => {
-          //     console.log(token);
-          //   }
-          // );
-
           // Create and assing jwt token.
           jwt.sign(
             { _id: user._id },
@@ -90,18 +79,17 @@ router.post("/", (req, res) => {
                 });
               }
 
-              console.log(token);
-
               // Set cookies of auth token in client side
               try {
-                res.cookie("auth-token", token, {
-                  httpOnly: true,
-                  // secure: true // only use https
-                });
-                return res.json({
-                  success: true,
-                  msg: "Cookie has been added.",
-                });
+                res
+                  .cookie("auth-token", token, {
+                    httpOnly: true,
+                    // secure: true // only use https
+                  })
+                  .json({
+                    success: true,
+                    msg: "Cookie has been added.",
+                  });
               } catch (err) {
                 console.log(err);
                 return res.status(500).json({
@@ -144,7 +132,17 @@ router.post("/", (req, res) => {
           msg: "Server error while finding the hotel.",
         });
       });
+  } else {
+    return res.status(400).json({ success: false, msg: "Invalid body" });
   }
+});
+
+router.get("/signout", verifyToken, (req, res) => {
+  //  When maxage is 1 millisecond the cookie deletes instantly
+  // We cannot delete cookie from the server so we used this method
+  res.cookie("auth-token", "", { maxAge: 1 }).json({
+    success: true,
+  });
 });
 
 router.get("/auth", verifyToken, (req, res) => {
