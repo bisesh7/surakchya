@@ -138,6 +138,12 @@ router.post("/", (req, res) => {
 });
 
 router.get("/signout", verifyToken, (req, res) => {
+  const API_KEY = req.header("API_KEY");
+
+  if (API_KEY !== config.get("API_KEY")) {
+    return res.status(401).json({ success: false, msg: "Login failed." });
+  }
+
   //  When maxage is 1 millisecond the cookie deletes instantly
   // We cannot delete cookie from the server so we used this method
   res.cookie("auth-token", "", { maxAge: 1 }).json({
@@ -145,9 +151,29 @@ router.get("/signout", verifyToken, (req, res) => {
   });
 });
 
-router.get("/auth", verifyToken, (req, res) => {
-  console.log(req.user);
-  return res.json({ success: true });
+router.get("/", verifyToken, (req, res) => {
+  const API_KEY = req.header("API_KEY");
+
+  if (API_KEY !== config.get("API_KEY")) {
+    return res.status(401).json({ success: false, msg: "Login failed." });
+  }
+
+  User.findById(req.user).then((user) => {
+    const userDetail = {
+      profilePicturePath: user.profilePicturePath,
+      streetAddress: user.streetAddress,
+      phoneNumber: user.phoneNumber,
+      messageReadCanBeSeen: user.messageReadCanBeSeen,
+      getNews: user.getNews,
+      confirmed: user.confirmed,
+      blocked: user.blocked,
+      date: user.date,
+      _id: user._id,
+      name: user.name,
+      email: user.email,
+    };
+    return res.json({ success: true, userDetail });
+  });
 });
 
 module.exports = router;
