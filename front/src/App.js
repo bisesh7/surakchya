@@ -1,6 +1,6 @@
 import "./App.css";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
-import HomeComponent from "./Components/HomeComponent";
+import HomeComponent from "./Components/Home/HomeComponent";
 import SigninComponent from "./Components/SigninComponent";
 import RegisterComponent from "./Components/RegisterComponent";
 

@@ -1,3 +1,57 @@
+:root {
+  --search-bar-color: rgba(155, 153, 153, 0.8);
+}
+
 .form {
   margin-top: 20vh;
+}
+
+.front-picture-container {
+  height: 65vh;
+  margin-top: 36px;
+}
+
+.front-picture {
+  width: 100%;
+  background-size: cover;
+}
+
+.search-bar {
+  padding: 20px 0px 20px 0px;
+  border-style: none;
+  border-radius: 45px;
+  background-color: var(--search-bar-color);
+  position: absolute;
+  width: 80vw;
+}
+
+.search-bar-row {
+  padding: 0px 20px 0px 30px;
+}
+
+.explore-cities {
+  margin-left: -18px;
+}
+
+.explore-card-image {
+  height: 20vh;
+}
+
+.live-anywhere {
+  margin-left: -18px;
+}
+
+.live-anywhere-image {
+  height: 40vh;
+}
+
+.join-as-host-image-container {
+  position: relative;
+}
+
+.join-as-host-info {
+  color: white;
+  position: absolute;
+  top: 80px;
+  left: 80px;
 }

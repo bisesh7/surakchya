@@ -1,8 +1,12 @@
 import React, { useEffect } from "react";
-import NavbarComponent from "./NavbarComponent";
+import NavbarComponent from "../NavbarComponent";
 import { connect } from "react-redux";
-import { userSignIn } from "../Actions/authActions";
+import { userSignIn } from "../../Actions/authActions";
 import axios from "axios";
+import FrontPictureComponent from "./FrontPictureComponent";
+import SearchBarComponent from "./SearchBarComponent";
+import ExploreAndLiveAnywhereComponent from "./ExploreAndLiveAnywhereComponent";
+import JoinAsAHostComponent from "./JoinAsAHostComponent";
 
 const HomeComponent = (props) => {
   useEffect(() => {
@@ -16,6 +20,10 @@ const HomeComponent = (props) => {
   return (
     <div>
       <NavbarComponent {...props} />
+      <SearchBarComponent />
+      <FrontPictureComponent />
+      <ExploreAndLiveAnywhereComponent />
+      <JoinAsAHostComponent />
     </div>
   );
 };
